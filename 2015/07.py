@@ -21,7 +21,9 @@
 import operator
 import re
 
-with open('input') as f:
+filename = 'input'
+
+with open(filename) as f:
     instructions = f.readlines()
 
 and_ = re.compile('(-*\w+) AND (-*\w+) -> (\w+)')
@@ -96,7 +98,7 @@ a = resolve()
 
 print(f'Part 1: {a}')
 
-with open('input') as f:
+with open(filename) as f:
     instructions = f.readlines()
 
 substitute('b', a)
