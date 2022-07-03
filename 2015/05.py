@@ -19,7 +19,7 @@
 # SOFTWARE.
 
 with open('input') as f:
-    strings = [s.rstrip() for s in f.readlines()]
+    strings = [s.rstrip() for s in f]
 
 
 def is_nice_1(s):
