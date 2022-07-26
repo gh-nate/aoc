@@ -27,7 +27,7 @@ class SolutionPart1
     @regexp = /(\d+)\s+(\d+)\s+(\d+)/
   end
 
-  def triangle?(side1, side2, side3)
+  def self.triangle?(side1, side2, side3)
     side1 + side2 > side3 &&
       side2 + side3 > side1 &&
       side3 + side1 > side2
@@ -35,7 +35,7 @@ class SolutionPart1
 
   def number_of_possible_triangles
     @instructions.map { |i| @regexp.match(i) }.count do |m|
-      triangle?(m[1].to_i, m[2].to_i, m[3].to_i)
+      self.class.triangle?(m[1].to_i, m[2].to_i, m[3].to_i)
     end
   end
 end
@@ -45,9 +45,9 @@ class SolutionPart2 < SolutionPart1
   def number_of_possible_triangles
     count = 0
     @instructions.map { |i| @regexp.match(i) }.each_slice(3) do |tm|
-      count += 1 if triangle?(tm[0][1].to_i, tm[1][1].to_i, tm[2][1].to_i)
-      count += 1 if triangle?(tm[0][2].to_i, tm[1][2].to_i, tm[2][2].to_i)
-      count += 1 if triangle?(tm[0][3].to_i, tm[1][3].to_i, tm[2][3].to_i)
+      count += 1 if self.class.triangle?(tm[0][1].to_i, tm[1][1].to_i, tm[2][1].to_i)
+      count += 1 if self.class.triangle?(tm[0][2].to_i, tm[1][2].to_i, tm[2][2].to_i)
+      count += 1 if self.class.triangle?(tm[0][3].to_i, tm[1][3].to_i, tm[2][3].to_i)
     end
     count
   end
