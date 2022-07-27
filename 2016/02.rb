@@ -94,12 +94,10 @@ class Solution
   end
 
   def bathroom_code
-    code = ''
-    @instructions.each do |line|
+    @instructions.reduce('') do |code, line|
       line.each_char { |char| @position.move(char) }
-      code += @position.code
+      code + @position.code
     end
-    code
   end
 end
 
