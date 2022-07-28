@@ -39,7 +39,7 @@ end
 # :nodoc:
 class SolutionPart1
   def initialize
-    @instructions = open('input').read.rstrip.split(', ')
+    @instructions = File.read('input').rstrip.split(', ')
     @position = Position.new
     @direction = :NORTH
   end

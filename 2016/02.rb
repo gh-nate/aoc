@@ -89,7 +89,7 @@ end
 # :nodoc:
 class Solution
   def initialize(keypad)
-    @instructions = open('input').readlines
+    @instructions = File.readlines('input')
     @position = keypad
   end
 

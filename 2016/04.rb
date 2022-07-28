@@ -23,7 +23,7 @@
 # :nodoc:
 class SolutionPart1
   def initialize
-    @list = open('input').readlines
+    @list = File.readlines('input')
   end
 
   def self.checksum(s)

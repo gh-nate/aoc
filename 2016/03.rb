@@ -23,7 +23,7 @@
 # :nodoc:
 class SolutionPart1
   def initialize
-    @instructions = open('input').readlines
+    @instructions = File.readlines('input')
     @regexp = /(\d+)\s+(\d+)\s+(\d+)/
   end
 
