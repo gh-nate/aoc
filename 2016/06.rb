@@ -33,6 +33,8 @@ class Solution
     end
   end
 
+  private :decode
+
   def error_corrected = decode(:max)
 
   def original_message = decode(:min)

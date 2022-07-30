@@ -40,6 +40,8 @@ class SolutionPart1
     @list.map { |i| regexp.match(i) }.filter { |m| self.class.checksum(m[1]) == m[3] }
   end
 
+  protected :real_rooms
+
   def sum = real_rooms.sum { |m| m[2].to_i }
 end
 

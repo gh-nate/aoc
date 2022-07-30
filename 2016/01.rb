@@ -61,6 +61,8 @@ class SolutionPart1
     end
   end
 
+  private :move
+
   def shortest_distance_to_easter_bunny_hq
     regexp = /(L|R)(\d+)/
     @instructions.map { |i| regexp.match(i) }.each do |m|
@@ -110,6 +112,8 @@ class SolutionPart2 < SolutionPart1
       @direction = :SOUTH
     end
   end
+
+  private :move
 end
 
 puts "Part 1: #{SolutionPart1.new.shortest_distance_to_easter_bunny_hq}"
