@@ -23,7 +23,8 @@
 # :nodoc:
 class SolutionPart1
   def initialize
-    @list = File.readlines('input')
+    regexp = /(.*)(\d{3})\[([a-z]{5})\]/
+    @real_rooms = File.readlines('input').map { |i| regexp.match(i) }.filter { |m| self.class.checksum(m[1]) == m[3] }
   end
 
   def self.checksum(s)
@@ -35,20 +36,13 @@ class SolutionPart1
     h.sort.reverse.reduce('') { |r, a| r + a.last.each_char.sort.join }[..4]
   end
 
-  def real_rooms
-    regexp = /(.*)(\d{3})\[([a-z]{5})\]/
-    @list.map { |i| regexp.match(i) }.filter { |m| self.class.checksum(m[1]) == m[3] }
-  end
-
-  protected :real_rooms
-
-  def sum = real_rooms.sum { |m| m[2].to_i }
+  def sum = @real_rooms.sum { |m| m[2].to_i }
 end
 
 # :nodoc:
 class SolutionPart2 < SolutionPart1
   def sector_id(real_name)
-    real_rooms.each do |m|
+    @real_rooms.each do |m|
       sector_id = m[2].to_i
       rotations = sector_id % 26
       name = m[1].each_char.reduce('') do |r, c|
