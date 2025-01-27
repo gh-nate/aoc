@@ -22,6 +22,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#define SIZE 1000
+
+static const char *fmt = "%u,%u";
 
 int main(int argc, char *argv[]) {
 	if (argc != 2) {
@@ -33,19 +38,67 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	unsigned int basement_position = 0, position = 0;
-	int c, floor = 0;
-	while ((c = fgetc(fp)) != EOF) {
-		switch (c) {
-			case '(':
-				position++;
-				floor++;
+	unsigned int lights_part_1[SIZE][SIZE] = {0};
+	unsigned int lights_part_2[SIZE][SIZE] = {0};
+
+	char *t, s[] = "turn off 999,999 through 999,999\n";
+	unsigned int j, x1, y1, x2, y2, lit = 0, brightness = 0;
+	while (fgets(s, 34, fp)) {
+		j = 0;
+		if (strstr(s, "turn off")) {
+			j = 9;
+		} else if (strstr(s, "turn on")) {
+			j = 8;
+		} else if (strstr(s, "toggle")) {
+			j = 7;
+		}
+		if (!j) {
+			continue;
+		}
+		t = s + j;
+		sscanf(t, fmt, &x1, &y1);
+		t = strrchr(t, ' ') + 1;
+		sscanf(t, fmt, &x2, &y2);
+		switch (j) {
+			case 9:
+				for (; x1 <= x2; x1++) {
+					for (j = y1; j <= y2; j++) {
+						if (lights_part_1[j][x1]) {
+							lights_part_1[j][x1] = 0;
+							lit--;
+						}
+						if (lights_part_2[j][x1]) {
+							lights_part_2[j][x1]--;
+							brightness--;
+						}
+					}
+				}
 				break;
-			case ')':
-				position++;
-				floor--;
-				if (!basement_position && floor == -1) {
-					basement_position = position;
+			case 8:
+				for (; x1 <= x2; x1++) {
+					for (j = y1; j <= y2; j++) {
+						if (!lights_part_1[j][x1]) {
+							lights_part_1[j][x1] = 1;
+							lit++;
+						}
+						lights_part_2[j][x1]++;
+						brightness++;
+					}
+				}
+				break;
+			case 7:
+				for (; x1 <= x2; x1++) {
+					for (j = y1; j <= y2; j++) {
+						if (lights_part_1[j][x1]) {
+							lights_part_1[j][x1] = 0;
+							lit--;
+						} else {
+							lights_part_1[j][x1] = 1;
+							lit++;
+						}
+						lights_part_2[j][x1] += 2;
+						brightness += 2;
+					}
 				}
 				break;
 		}
@@ -60,11 +113,11 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	int rv = printf("Part 1: %d\n", floor);
+	int rv = printf("Part 1: %u\n", lit);
 	if (rv < 0) {
 		return EXIT_FAILURE;
 	}
-	rv = printf("Part 2: %u\n", basement_position);
+	rv = printf("Part 2: %u\n", brightness);
 	if (rv < 0) {
 		return EXIT_FAILURE;
 	}

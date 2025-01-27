@@ -60,6 +60,11 @@ int main(int argc, char *argv[]) {
 		total_ribbon += ribbon(l, w, h);
 	}
 
+	if (ferror(fp)) {
+		fclose(fp);
+		return EXIT_FAILURE;
+	}
+
 	if (fclose(fp) == EOF) {
 		return EXIT_FAILURE;
 	}

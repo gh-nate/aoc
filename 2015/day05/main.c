@@ -111,6 +111,11 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	if (ferror(fp)) {
+		fclose(fp);
+		return EXIT_FAILURE;
+	}
+
 	if (fclose(fp) == EOF) {
 		return EXIT_FAILURE;
 	}
