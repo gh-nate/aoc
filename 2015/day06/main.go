@@ -24,69 +24,77 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
-func isNicePart1(s string) bool {
-	var (
-		numVowels            int
-		p                    rune
-		hasLetterAppearTwice bool
-	)
-	for _, c := range s {
-		switch c {
-		case 'a', 'e', 'i', 'o', 'u':
-			numVowels++
-		}
-		if p == c {
-			hasLetterAppearTwice = true
-		}
-		p = c
-	}
-	for i := range len(s) - 1 {
-		switch s[i : i+2] {
-		case "ab", "cd", "pq", "xy":
-			return false
-		}
-	}
-	return numVowels >= 3 && hasLetterAppearTwice
-}
+const (
+	toggle = iota
+	turnOff
+	turnOn
+	format    = "%d,%d through %d,%d"
+	dimension = 1000
+)
 
-func isNicePart2(s string) bool {
-	var hasNonOverlappingPairs bool
-	pairs := make(map[string]int)
-	for i := range len(s) - 1 {
-		ss := s[i : i+2]
-		j, ok := pairs[ss]
-		if ok && i != j {
-			hasNonOverlappingPairs = true
-			break
-		} else {
-			pairs[ss] = i + 1
-		}
-	}
-	var hasSandwich bool
-	for i := range len(s) - 2 {
-		if s[i] == s[i+2] {
-			hasSandwich = true
-			break
-		}
-	}
-	return hasNonOverlappingPairs && hasSandwich
-}
+var prefixes = [3]string{"toggle", "turn off", "turn on"}
 
 func main() {
+	var (
+		lightsPart1     [dimension][dimension]bool
+		lightsPart2     [dimension][dimension]int
+		rowPart1        *[dimension]bool
+		rowPart2        *[dimension]int
+		x1, y1, x2, y2  int
+		action          int
+		lit, brightness int
+	)
 	file, _ := os.Open(os.Args[len(os.Args)-1])
-	var totalPart1, totalPart2 int
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		s := scanner.Text()
-		if isNicePart1(s) {
-			totalPart1++
+		for i, prefix := range prefixes {
+			s, found := strings.CutPrefix(s, prefix)
+			if found {
+				action = i
+				fmt.Sscanf(s, format, &x1, &y1, &x2, &y2)
+				break
+			}
 		}
-		if isNicePart2(s) {
-			totalPart2++
+		for ; y1 <= y2; y1++ {
+			rowPart1 = &lightsPart1[y1]
+			rowPart2 = &lightsPart2[y1]
+			for i := x1; i <= x2; i++ {
+				switch action {
+				case toggle:
+					if rowPart1[i] {
+						rowPart1[i] = false
+						lit--
+					} else {
+						rowPart1[i] = true
+						lit++
+					}
+					rowPart2[i] += 2
+					brightness += 2
+				case turnOff:
+					if rowPart1[i] {
+						rowPart1[i] = false
+						lit--
+					}
+					if rowPart2[i] > 0 {
+						rowPart2[i]--
+						brightness--
+					}
+				case turnOn:
+					if !rowPart1[i] {
+						rowPart1[i] = true
+						lit++
+					}
+					rowPart2[i]++
+					brightness++
+				}
+			}
 		}
 	}
-	fmt.Println("Part 1:", totalPart1)
-	fmt.Println("Part 2:", totalPart2)
+
+	fmt.Println("Part 1:", lit)
+	fmt.Println("Part 2:", brightness)
 }

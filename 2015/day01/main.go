@@ -32,9 +32,9 @@ func main() {
 	for i, b := range data {
 		switch b {
 		case '(':
-			floor += 1
+			floor++
 		case ')':
-			floor -= 1
+			floor--
 			if position == 0 && floor == -1 {
 				position = i + 1
 			}

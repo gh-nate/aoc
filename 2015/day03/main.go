@@ -38,13 +38,13 @@ func main() {
 	for _, b := range data {
 		switch b {
 		case '^':
-			santa.y += 1
+			santa.y++
 		case 'v':
-			santa.y -= 1
+			santa.y--
 		case '>':
-			santa.x += 1
+			santa.x++
 		case '<':
-			santa.x -= 1
+			santa.x--
 		}
 		visited[santa] = true
 	}
@@ -68,13 +68,13 @@ func main() {
 		}
 		switch b {
 		case '^':
-			who.y += 1
+			who.y++
 		case 'v':
-			who.y -= 1
+			who.y--
 		case '>':
-			who.x += 1
+			who.x++
 		case '<':
-			who.x -= 1
+			who.x--
 		}
 		visited[*who] = true
 	}
